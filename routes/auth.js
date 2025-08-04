@@ -44,11 +44,12 @@ router.post("/login", async (req, res) => {
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(400).json({ error: "Invalid credentials" });
 
-    const token = jwt.sign(
+   // ✅ Correct: use newUser if that's the created user
+const token = jwt.sign(
   { id: newUser._id, role: newUser.role },
-  process.env.JWT_SECRET,
-  { expiresIn: "1d" }
+  process.env.JWT_SECRET || "SECRET_KEY"
 );
+
 
 
     res.json({
